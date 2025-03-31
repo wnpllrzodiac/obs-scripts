@@ -51,9 +51,9 @@ def script_properties():
 
 
 def script_defaults(settings):
-    obs.obs_data_set_default_string(settings, "_template", "[name]_[date]_[time]")
+    obs.obs_data_set_default_string(settings, "_template", "[name]")
     obs.obs_data_set_default_bool(settings, "_askname", True)
-    obs.obs_data_set_default_bool(settings, "_askseries", True)
+    obs.obs_data_set_default_bool(settings, "_askseries", False)
     obs.obs_data_set_default_bool(settings, "_series", False)
     obs.obs_data_set_default_string(settings, "_name", "Untitled_recording")
     obs.obs_data_set_default_int(settings, "_times", 0)
