@@ -150,11 +150,16 @@ def fill_template(t, src="", name="", num=0):
 def file_rename(file, name_new):
     newPath = Path(file.parent, name_new + file.suffix)
     index = 1
+    autoRename = False
     while newPath.is_file():
+        autoRename = True
         newPath = Path(file.parent, name_new + '_%03d' % index + file.suffix)
         index += 1
         if index > 10:
             index = 999
+    if autoRename:
+        messagebox.showinfo("Information", "file renamed to: " + newPath.name)
+        
     file.rename(newPath)
 
 
