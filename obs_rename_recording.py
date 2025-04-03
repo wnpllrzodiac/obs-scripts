@@ -6,7 +6,8 @@ import easygui
 from datetime import datetime
 import pyautogui
 from threading import Timer
-
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
 class Data:
     _template_ = None
@@ -23,7 +24,6 @@ question_name = "What [name] do you prefer?"
 question_series = "Will this be series?"
 
 source_name = ""
-
 
 def script_properties():
     props = obs.obs_properties_create()
@@ -152,8 +152,19 @@ def file_rename(file, name_new):
 
 
 def ask_name(text):
-    return easygui.enterbox(question_name, "OBS", text)
+    #return easygui.enterbox(question_name, "OBS", text)
+    root = tk.Tk()
+    root["bg"] = "dark grey"
+    root.withdraw()
+    default_value = '55555'
 
+    user_input = simpledialog.askstring(
+        "OBS", 
+        question_name, 
+        parent=root,
+        initialvalue=default_value)
+
+    return user_input
 
 def ask_series():
     return easygui.ynbox(question_series, "OBS")
