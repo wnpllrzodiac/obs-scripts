@@ -148,7 +148,14 @@ def fill_template(t, src="", name="", num=0):
 
 
 def file_rename(file, name_new):
-    file.rename(Path(file.parent, name_new + file.suffix))
+    newPath = Path(file.parent, name_new + file.suffix)
+    index = 1
+    while newPath.is_file():
+        newPath = Path(file.parent, name_new + '_%03d' % index + file.suffix)
+        index += 1
+        if index > 10:
+            index = 999
+    file.rename(newPath)
 
 
 def ask_name(text):
