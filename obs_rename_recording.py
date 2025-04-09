@@ -162,21 +162,28 @@ def file_rename(file, name_new):
         
     file.rename(newPath)
 
+class CustomDialog(simpledialog.Dialog):
+    def __init__(self, parent, title=None):
+        self.user_action = None
+        super().__init__(parent, title)
+
+    def body(self, master):
+        # 窗口内容
+        self.geometry("400x150")
+        tk.Label(master, text="保存的文件名：").grid(row=0)
+        self.entry = tk.Entry(master, width=30)
+        self.entry.grid(row=1)
+        self.entry.insert(0, "55555")
+        return self.entry 
+
+    def apply(self):
+        self.result = self.entry.get()
 
 def ask_name(text):
     #return easygui.enterbox(question_name, "OBS", text)
-    root = tk.Tk()
-    root["bg"] = "dark grey"
-    root.withdraw()
-    default_value = '55555'
-
-    user_input = simpledialog.askstring(
-        "OBS", 
-        question_name, 
-        parent=root,
-        initialvalue=default_value)
-
-    return user_input
+    
+    dialog = CustomDialog(root, title="保存录制文件")
+    return dialog.result
 
 def ask_series():
     return easygui.ynbox(question_series, "OBS")
@@ -203,3 +210,6 @@ def snake(s):
         sub('([A-Z][a-z]+)', r' \1',
             sub('([A-Z]+)', r' \1',
                 s.replace('-', ' '))).split()).lower()
+
+root = tk.Tk()
+root.withdraw()
