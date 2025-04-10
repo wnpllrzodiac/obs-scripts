@@ -20,7 +20,7 @@ class Data:
     _titledelay_ = None
 
 
-question_name = "What [name] do you prefer?"
+question_name = "请输入保存的文件名"
 question_series = "Will this be series?"
 
 source_name = ""
@@ -84,9 +84,11 @@ def on_event(event):
     elif event == obs.OBS_FRONTEND_EVENT_RECORDING_STOPPED:
         file = get_recorded_file()
 
+        do_rename = False
         if Data._askname_ and "[name]" in Data._template_:
             input_name = ask_name(Data._name_)
             if input_name:
+                do_rename = True
                 if (input_name != Data._name_):
                     Data._name_ = input_name
                     obs.obs_data_set_string(Data._settings_, "_name", Data._name_)
@@ -104,9 +106,10 @@ def on_event(event):
                 Data._times_ += 1
             obs.obs_data_set_int(Data._settings_, "_times", Data._times_)
 
-        new_name = fill_template(Data._template_, source_name, Data._name_, Data._times_)
+        if do_rename:
+            new_name = fill_template(Data._template_, source_name, Data._name_, Data._times_)
 
-        file_rename(file, new_name)
+            file_rename(file, new_name)
 
 
 def get_source_name():
@@ -162,28 +165,8 @@ def file_rename(file, name_new):
         
     file.rename(newPath)
 
-class CustomDialog(simpledialog.Dialog):
-    def __init__(self, parent, title=None):
-        self.user_action = None
-        super().__init__(parent, title)
-
-    def body(self, master):
-        # 窗口内容
-        self.geometry("400x150")
-        tk.Label(master, text="保存的文件名：").grid(row=0)
-        self.entry = tk.Entry(master, width=30)
-        self.entry.grid(row=1)
-        self.entry.insert(0, "55555")
-        return self.entry 
-
-    def apply(self):
-        self.result = self.entry.get()
-
 def ask_name(text):
-    #return easygui.enterbox(question_name, "OBS", text)
-    
-    dialog = CustomDialog(root, title="保存录制文件")
-    return dialog.result
+    return easygui.enterbox(question_name, "OBS", text)
 
 def ask_series():
     return easygui.ynbox(question_series, "OBS")
